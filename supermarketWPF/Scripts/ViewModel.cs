@@ -8,5 +8,9 @@ namespace supermarketWPF
 {
     internal class ViewModel
     {
+        public ViewModel()
+        {
+            MainWindow mainWindow = new MainWindow();
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace supermarketWPF
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }
