@@ -41,7 +41,7 @@ public class BonDeCasaDAL
             while (reader.Read())
             {
                 BonCasa BonCasa = new BonCasa();
-                BonCasa.ID = Convert.ToInt32(reader["ID"]);
+                BonCasa.IDBon = Convert.ToInt32(reader["ID"]);
                 BonCasa.DataEliberare = Convert.ToDateTime(reader["DataEliberare"]);
                 BonCasa.Casier = reader["Casier"].ToString();
                 BonCasa.SumaIncasata = Convert.ToDecimal(reader["SumaIncasata"]);
@@ -62,7 +62,7 @@ public class BonDeCasaDAL
             command.Parameters.AddWithValue("@DataEliberare", BonCasa.DataEliberare);
             command.Parameters.AddWithValue("@Casier", BonCasa.Casier);
             command.Parameters.AddWithValue("@SumaIncasata", BonCasa.SumaIncasata);
-            command.Parameters.AddWithValue("@ID", BonCasa.ID);
+            command.Parameters.AddWithValue("@ID", BonCasa.IDBon);
 
             connection.Open();
             command.ExecuteNonQuery();
