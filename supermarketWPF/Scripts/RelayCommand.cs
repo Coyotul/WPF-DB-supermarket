@@ -1,55 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace supermarketWPF
 {
-    class RelayCommand<T> : ICommand
+    internal class RelayCommand : ICommand
     {
-        private Action<T> commandTask;
-        private Predicate<T> canExecuteTask;
+        private readonly Action<object> _execute;
+        private readonly Func<object, bool> _canExecute;
 
-        public RelayCommand(Action<T> workToDo)
-            : this(workToDo, DefaultCanExecute)
-        {
-            commandTask = workToDo;
-        }
+        public event EventHandler CanExecuteChanged;
 
-        public RelayCommand(Action<T> workToDo, Predicate<T> canExecute)
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
-            commandTask = workToDo;
-            canExecuteTask = canExecute;
-        }
-
-        private static bool DefaultCanExecute(T parameter)
-        {
-            return true;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            return canExecuteTask != null && canExecuteTask((T)parameter);
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
-            commandTask((T)parameter);
+            _execute(parameter);
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
