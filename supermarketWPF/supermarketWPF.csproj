@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +59,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CashierWindow.xaml.cs">
+      <DependentUpon>CashierWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\CategorieProdusConverter.cs" />
+    <Compile Include="Converters\ProducatorConverter.cs" />
+    <Compile Include="Converters\ProdusConverter.cs" />
+    <Compile Include="Converters\UtilizatorConverter.cs" />
     <Compile Include="Layers\BussinesLayer\BonCasaService.cs" />
     <Compile Include="Layers\BussinesLayer\CategorieProdusService.cs" />
     <Compile Include="Layers\BussinesLayer\DetaliiBonCasaService.cs" />
@@ -68,6 +79,7 @@
     <Compile Include="Layers\BussinesLayer\UtilizatorService.cs" />
     <Compile Include="Layers\DataAccesLayer\BonCasaDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\CategorieProdusDAL.cs" />
+    <Compile Include="Layers\DataAccesLayer\DALHelper.cs" />
     <Compile Include="Layers\DataAccesLayer\DetaliiBonCasaDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\OfertaDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\ProducatorDAL.cs" />
@@ -83,6 +95,14 @@
     <Compile Include="Scripts\StocProdusViewModel.cs" />
     <Compile Include="Scripts\UtilizatorViewModel.cs" />
     <Compile Include="Scripts\ViewModel.cs" />
+    <Page Include="AdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CashierWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,0 +1,38 @@
+﻿<Window x:Class="supermarketWPF.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:supermarketWPF"
+        xmlns:mv="clr-namespace:supermarketWPF.ViewModels"
+        xmlns:c="clr-namespace:SupermarketApp.Converters"
+        mc:Ignorable="d"
+        Title="AdminWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <mv:UtilizatorViewModel/>
+    </Window.DataContext>
+    <StackPanel>
+        <WrapPanel Height="56">
+            <Button Content="Adaugă" Command="{Binding AdaugaUtilizatorCommand}" Height="28" Width="75"/>
+            <Button Content="Modifică" Margin="15" Width="100" Height="30" Command="{Binding EditeazaUtilizatorCommand}"/>
+            <Button Content="Șterge" Margin="15" Width="100" Height="30" Command="{Binding StergeUtilizatorCommand}"/>
+        </WrapPanel>
+        <WrapPanel Margin="0,15,0,0">
+            <Label Width="150" FontSize="15">Nume Utilizator:</Label>
+            <TextBox Name="txtNumeUtilizator" Width="200" Text="{Binding Username}"/>
+        </WrapPanel>
+        <WrapPanel Margin="0,15,0,0">
+            <Label Width="150" FontSize="15">Parola:</Label>
+            <TextBox Name="txtParola" Width="200" Text="{Binding Parola}"/>
+        </WrapPanel>
+        <!-- DataGrid pentru afișarea utilizatorilor -->
+        <DataGrid Name="utilizatorGrid" AutoGenerateColumns="False" Margin="0,15,0,0" Height="185"
+          ItemsSource="{Binding Utilizatori}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
+          SelectedItem="{Binding UtilizatorSelectat, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nume Utilizator" Binding="{Binding NumeUtilizator}"/>
+                <DataGridTextColumn Header="Parola" Binding="{Binding Parola}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Window>

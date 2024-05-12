@@ -2,70 +2,210 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
-public class UtilizatorViewModel : INotifyPropertyChanged
+namespace supermarketWPF.ViewModels
 {
-    private Utilizator utilizatorSelectat;
-    private ObservableCollection<Utilizator> utilizatori;
-    private UserDAL userDAL;
-
-    public Utilizator UtilizatorSelectat
+    public class UtilizatorViewModel : INotifyPropertyChanged
     {
-        get { return utilizatorSelectat; }
-        set
+        private Utilizator utilizatorSelectat;
+        private ObservableCollection<Utilizator> utilizatori;
+        private UserDAL userDAL;
+        private UtilizatorService userBL;
+        public UtilizatorViewModel()
         {
-            utilizatorSelectat = value;
-            OnPropertyChanged("UtilizatorSelectat");
-        }
-    }
-
-    public ObservableCollection<Utilizator> Utilizatori
-    {
-        get { return utilizatori; }
-        set
-        {
-            utilizatori = value;
+            utilizatori = new ObservableCollection<Utilizator>();
+            userDAL = new UserDAL(@"Data Source=DESKTOP-3QK6J8I\SQLEXPRESS;Initial Catalog=Supermarket;Integrated Security=True");
+            utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
             OnPropertyChanged("Utilizatori");
         }
-    }
 
-    public ICommand AdaugaUtilizatorCommand { get; set; }
-    public ICommand EditeazaUtilizatorCommand { get; set; }
-    public ICommand StergeUtilizatorCommand { get; set; }
+        public Utilizator UtilizatorSelectat
+        {
+            get { return utilizatorSelectat; }
+            set
+            {
+                utilizatorSelectat = value;
+                OnPropertyChanged("UtilizatorSelectat");
+            }
+        }
 
-    public UtilizatorViewModel(string connectionString)
-    {
-        userDAL = new UserDAL(connectionString);
+        public ObservableCollection<Utilizator> Utilizatori
+        {
+            get { return utilizatori; }
+            set
+            {
+                utilizatori = value;
+                OnPropertyChanged("Utilizatori");
+            }
+        }
 
-        Utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
+        private string parola;
 
-        AdaugaUtilizatorCommand = new RelayCommand(AdaugaUtilizator);
-        EditeazaUtilizatorCommand = new RelayCommand(EditeazaUtilizator);
-        StergeUtilizatorCommand = new RelayCommand(StergeUtilizator);
-    }
 
-    private void AdaugaUtilizator(object obj)
-    {
-        userDAL.AdaugaUtilizator(UtilizatorSelectat);
-        Utilizatori.Add(UtilizatorSelectat);
-    }
+        public string Parola
+        {
+            get { return parola; }
+            set
+            {
+                parola = value;
+                OnPropertyChanged("Parola");
+            }
+        }
 
-    private void EditeazaUtilizator(object obj)
-    {
-        userDAL.ActualizeazaUtilizator(UtilizatorSelectat);
-    }
+        private string username;
 
-    private void StergeUtilizator(object obj)
-    {
-        userDAL.StergeUtilizator(UtilizatorSelectat.ID);
-        Utilizatori.Remove(UtilizatorSelectat);
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public string Username
+        {
+            get { return username; }
+            set
+            {
+                username = value;
+                OnPropertyChanged("Username");
+            }
+        }
 
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private RelayCommand adaugaUtilizatorCommand;
+
+        public ICommand AdaugaUtilizatorCommand
+        {
+            get
+            {
+                if (adaugaUtilizatorCommand == null)
+                {
+                    adaugaUtilizatorCommand = new RelayCommand(AdaugaUtilizator);
+                }
+
+                return adaugaUtilizatorCommand;
+            }
+        }
+
+        private RelayCommand editeazaUtilizatorCommand;
+
+        public ICommand EditeazaUtilizatorCommand
+        {
+            get
+            {
+                if (editeazaUtilizatorCommand == null)
+                {
+                    editeazaUtilizatorCommand = new RelayCommand(EditeazaUtilizator);
+                }
+
+                return editeazaUtilizatorCommand;
+            }
+        }
+
+        private RelayCommand stergeUtilizatorCommand;
+
+        public ICommand StergeUtilizatorCommand
+        {
+            get
+            {
+                if (stergeUtilizatorCommand == null)
+                {
+                    stergeUtilizatorCommand = new RelayCommand(StergeUtilizator);
+                }
+
+                return stergeUtilizatorCommand;
+            }
+        }
+        public UtilizatorViewModel(string connectionString)
+        {
+            userDAL = new UserDAL(connectionString);
+
+            Utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
+
+            
+        }
+
+        private void AdaugaUtilizator(object obj)
+        {
+            UtilizatorSelectat = new Utilizator();
+            UtilizatorSelectat.NumeUtilizator = Username;
+            UtilizatorSelectat.ID = Utilizatori.Count + 1;
+            UtilizatorSelectat.Parola = Parola;
+            UtilizatorSelectat.TipUtilizator = "casier";
+            userDAL.AdaugaUtilizator(UtilizatorSelectat);
+            Utilizatori.Add(UtilizatorSelectat);
+            utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
+            OnPropertyChanged("Utilizatori"); // Notifică ObservableCollection că s-au adăugat elemente noi
+            MessageBox.Show("Utilizatorul a fost adăugat.");
+        }
+
+        private void EditeazaUtilizator(object obj)
+        {
+            userDAL.ActualizeazaUtilizator(username, parola, UtilizatorSelectat);
+            utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
+
+            OnPropertyChanged("Utilizatori"); // Notifică ObservableCollection că s-au adăugat elemente noi
+            MessageBox.Show("Utilizatorul a fost actualizat.");
+        }
+
+        private void StergeUtilizator(object obj)
+        {
+            userDAL.StergeUtilizator(UtilizatorSelectat.ID);
+            utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
+
+            OnPropertyChanged("Utilizatori"); // Notifică ObservableCollection că s-au adăugat elemente noi
+            MessageBox.Show("Utilizatorul a fost șters.");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private RelayCommand loginCommand;
+
+        public ICommand LoginCommand
+        {
+            get
+            {
+                if (loginCommand == null)
+                {
+                    loginCommand = new RelayCommand(Login);
+                }
+
+                return loginCommand;
+            }
+        }
+
+        private void Login(object commandParameter)
+        {
+            if (!string.IsNullOrEmpty(Parola))
+            {
+                // Verificăm în baza de date dacă există un utilizator cu numele introdus și parola corespunzătoare
+                var utilizatorGasit = userDAL.GetUtilizatorByParola(Parola);
+
+                if (utilizatorGasit != null)
+                {
+                    if(utilizatorGasit.TipUtilizator == "cashier")
+                    {
+                        Window window = new CashierWindow();
+                        window.Show();
+                    }
+                    else
+                    {
+                        Window window = new AdminWindow();
+                        window.Show();
+                    }
+                   
+                }
+                else
+                {
+                    MessageBox.Show("Utilizatorul nu există sau parola este incorectă.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Introduceți numele de utilizator și parola.");
+            }
+        }
     }
 }

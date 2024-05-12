@@ -4,10 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:supermarketWPF"
+        xmlns:c="clr-namespace:SupermarketApp.Converters"
+        xmlns:mv="clr-namespace:supermarketWPF.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-        
+    <Window.DataContext>
+        <mv:UtilizatorViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <c:UtilizatorConverter x:Key="utilizatorConverter"/>
+    </Window.Resources>
     <Grid>
-        
+        <StackPanel>
+            <StackPanel.Resources>
+                <c:UtilizatorConverter x:Key="utilizatorConvert"/>
+            </StackPanel.Resources>
+            <WrapPanel Height="56">
+                <!-- Butonul pentru logare -->
+                <Button Content="Logare" Command="{Binding LoginCommand}" Height="28" Width="75"/>
+            </WrapPanel>
+            <!-- Textbox-uri pentru introducerea numelui de utilizator și a parolei -->
+            <WrapPanel Margin="0,15,0,0">
+                <Label Width="150" FontSize="15">Nume utilizator:</Label>
+                <TextBox Name="txtNumeUtilizator" Width="200" Text="{Binding NumeUtilizator}"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,15,0,0">
+                <Label Width="150" FontSize="15">Parola:</Label>
+                <TextBox Name="txtParola" Width="200" Text="{Binding Parola}"/>
+            </WrapPanel>
+            <!-- DataGrid-ul pentru afișarea listei de utilizatori -->
+        </StackPanel>
     </Grid>
 </Window>
