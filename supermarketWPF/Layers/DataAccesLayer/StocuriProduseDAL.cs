@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Windows;
 using supermarketWPF.Layers.DataAccesLayer;
 
 public class StocProdusDAL
@@ -31,6 +31,7 @@ public class StocProdusDAL
 
             connection.Open();
             command.ExecuteNonQuery();
+            MessageBox.Show("Stocul de produs a fost adăugat cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -55,7 +56,10 @@ public class StocProdusDAL
                 stocProdus.Cantitate = Convert.ToInt32(reader["Cantitate"]);
                 stocProdus.UnitateMasura = reader["UnitateMasura"].ToString();
                 stocProdus.DataAprovizionare = Convert.ToDateTime(reader["DataAprovizionare"]);
-                stocProdus.DataExpirare = Convert.ToDateTime(reader["DataExpirare"]);
+                if (reader["DataExpirare"] != DBNull.Value)
+                    stocProdus.DataExpirare = Convert.ToDateTime(reader["DataExpirare"]);
+                else
+                    stocProdus.DataExpirare = DateTime.MinValue;
                 stocProdus.PretAchizitie = Convert.ToDecimal(reader["PretAchizitie"]);
                 stocProdus.PretVanzare = Convert.ToDecimal(reader["PretVanzare"]);
 
@@ -83,6 +87,7 @@ public class StocProdusDAL
 
             connection.Open();
             command.ExecuteNonQuery();
+            MessageBox.Show("Stocul de produs a fost actualizat cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -97,6 +102,7 @@ public class StocProdusDAL
 
             connection.Open();
             command.ExecuteNonQuery();
+            MessageBox.Show("Stocul de produs a fost șters cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

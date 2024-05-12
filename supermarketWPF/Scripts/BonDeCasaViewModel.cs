@@ -1,84 +1,103 @@
-﻿using System;
+﻿using supermarketWPF.Layers.DataAccesLayer;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.SqlClient;
 
-public class BonDeCasaDAL
+namespace supermarketWPF.ViewModels
 {
-    private string connectionString;
-
-    public BonDeCasaDAL(string connectionString)
+    public class BonDeCasaViewModel : INotifyPropertyChanged
     {
-        this.connectionString = connectionString;
-    }
+        private ObservableCollection<BonComplet> bonuri;
+        private BonCasaDAL bonCasaDAL;
 
-    public void AdaugaBonDeCasa(BonCasa BonCasa)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        private string idBon;
+        private string dataEliberare;
+        private string casier;
+        private string sumaIncasata;
+        private string idProdus;
+        private string subtotal;
+
+        public string IDBon
         {
-            string query = "INSERT INTO BonuriDeCasa (DataEliberare, Casier, SumaIncasata) VALUES (@DataEliberare, @Casier, @SumaIncasata)";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@DataEliberare", BonCasa.DataEliberare);
-            command.Parameters.AddWithValue("@Casier", BonCasa.Casier);
-            command.Parameters.AddWithValue("@SumaIncasata", BonCasa.SumaIncasata);
-
-            connection.Open();
-            command.ExecuteNonQuery();
-        }
-    }
-
-    public List<BonCasa> GetBonuriDeCasa()
-    {
-        List<BonCasa> bonuriDeCasa = new List<BonCasa>();
-
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            string query = "SELECT * FROM BonuriDeCasa";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            get { return idBon; }
+            set
             {
-                BonCasa BonCasa = new BonCasa();
-                BonCasa.IDBon = Convert.ToInt32(reader["ID"]);
-                BonCasa.DataEliberare = Convert.ToDateTime(reader["DataEliberare"]);
-                BonCasa.Casier = reader["Casier"].ToString();
-                BonCasa.SumaIncasata = Convert.ToDecimal(reader["SumaIncasata"]);
-
-                bonuriDeCasa.Add(BonCasa);
+                idBon = value;
+                OnPropertyChanged("IDBon");
+            }
+        }
+        public string DataEliberare
+        {
+            get { return dataEliberare; }
+            set
+            {
+                dataEliberare = value;
+                OnPropertyChanged("DataEliberare");
+            }
+        }
+        public string Casier
+        {
+            get { return casier; }
+            set
+            {
+                casier = value;
+                OnPropertyChanged("Casier");
+            }
+        }
+        public string SumaIncasata
+        {
+            get { return sumaIncasata; }
+            set
+            {
+                sumaIncasata = value;
+                OnPropertyChanged("SumaIncasata");
+            }
+        }
+        public string IDProdus
+        {
+            get { return idProdus; }
+            set
+            {
+                idProdus = value;
+                OnPropertyChanged("IDProdus");
+            }
+        }
+        public string Subtotal
+        {
+            get { return subtotal; }
+            set
+            {
+                subtotal = value;
+                OnPropertyChanged("Subtotal");
             }
         }
 
-        return bonuriDeCasa;
-    }
 
-    public void ActualizeazaBonDeCasa(BonCasa BonCasa)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        public ObservableCollection<BonComplet> Bonuri
         {
-            string query = "UPDATE BonuriDeCasa SET DataEliberare = @DataEliberare, Casier = @Casier, SumaIncasata = @SumaIncasata WHERE ID = @ID";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@DataEliberare", BonCasa.DataEliberare);
-            command.Parameters.AddWithValue("@Casier", BonCasa.Casier);
-            command.Parameters.AddWithValue("@SumaIncasata", BonCasa.SumaIncasata);
-            command.Parameters.AddWithValue("@ID", BonCasa.IDBon);
-
-            connection.Open();
-            command.ExecuteNonQuery();
+            get { return bonuri; }
+            set
+            {
+                bonuri = value;
+                OnPropertyChanged("Bonuri");
+            }
         }
-    }
 
-    public void StergeBonDeCasa(int idBonDeCasa)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            string query = "DELETE FROM BonuriDeCasa WHERE ID = @ID";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@ID", idBonDeCasa);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-            connection.Open();
-            command.ExecuteNonQuery();
+        public BonDeCasaViewModel()
+        {
+            bonuri = new ObservableCollection<BonComplet>();
+            bonCasaDAL = new BonCasaDAL(@"Data Source=DESKTOP-3QK6J8I\SQLEXPRESS;Initial Catalog=Supermarket;Integrated Security=false");
+            Bonuri = new ObservableCollection<BonComplet>(bonCasaDAL.GetBonComplet());
+            OnPropertyChanged("Bonuri");
         }
     }
 }

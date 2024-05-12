@@ -10,10 +10,13 @@ namespace supermarketWPF.Layers.DataAccesLayer
     public class ProdusDAL
     {
         private string connectionString;
+        List<Produs> produse;
+
 
         public ProdusDAL(string connectionString)
         {
             this.connectionString = connectionString;
+            produse = new List<Produs>();
         }
 
         public void AdaugaProdus(Produs produs)
@@ -70,7 +73,15 @@ namespace supermarketWPF.Layers.DataAccesLayer
 
         public void StergeProdus(string numeprodus)
         {
-            try
+            for(int i = 0; i < produse.Count; i++)
+            {
+                if (produse[i].NumeProdus == numeprodus)
+                {
+                    produse.RemoveAt(i);
+                    break;
+                }
+            }
+            /*try
             {
                 using (SqlConnection connection = DALHelper.Connection)
                 {
@@ -86,13 +97,15 @@ namespace supermarketWPF.Layers.DataAccesLayer
             {
                 Console.WriteLine(e);
                 MessageBox.Show("Produsul nu a putut fi sters", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            }*/
         }
 
         public List<Produs> GetProduse()
         {
-            List<Produs> produse = new List<Produs>();
-
+            if(produse.Count != 0)
+            {
+                return produse;
+            }
             try
             {
                 using (SqlConnection connection = DALHelper.Connection)

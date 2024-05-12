@@ -42,6 +42,9 @@
             <Button Content="Modifică Produs" Command="{Binding ModificaProdusCommand}" Margin="10"/>
             <!-- Buton pentru ștergerea unui produs -->
             <Button Content="Șterge Produs" Command="{Binding StergeProdusCommand}" Margin="10"/>
+            <TextBlock Text="Cauta dupa producator" Margin="10"/>
+            <TextBox x:Name="txtPret" Width="200" Text="{Binding ProducatorCautare}" />
+
             <!-- DataGrid pentru afișarea produselor -->
             <DataGrid Name="produseGrid" AutoGenerateColumns="False" Margin="10"
                       ItemsSource="{Binding Produse}" IsReadOnly="True" SelectedItem="{Binding ProdusSelectat , Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Visible">

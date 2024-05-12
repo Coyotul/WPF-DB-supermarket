@@ -89,9 +89,13 @@ namespace supermarketWPF.ViewModels
             stocProdusDAL = new StocProdusDAL(connectionString);
 
             Stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
+            OnPropertyChanged("Stocuri");
         }
         public StocProdusViewModel()
         {
+            stocProdusDAL = new StocProdusDAL(@"ConnectionString");
+            Stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
+            OnPropertyChanged("Stocuri");
         }
 
         public StocProdus StocSelectat
@@ -155,14 +159,35 @@ namespace supermarketWPF.ViewModels
 
         private void AdaugaStoc(object obj)
         {
-            stocProdusDAL.AdaugaStocProdus(StocSelectat);
+            StocProdus stoc = new StocProdus
+            {
+                IDProdus = int.Parse(IDProdus),
+                Cantitate = Convert.ToInt32(Cantitate),
+                UnitateMasura = UnitateMasura,
+                DataAprovizionare = DataAprovizionare,
+                DataExpirare = DataExpirare,
+                PretAchizitie = Convert.ToDecimal(PretAchizitie),
+                PretVanzare = ConfigFile.adaosComercial * Convert.ToDecimal(PretAchizitie)/100 + Convert.ToDecimal(PretAchizitie)
+            };
+            stocProdusDAL.AdaugaStocProdus(stoc);
             Stocuri.Add(StocSelectat);
             stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
             OnPropertyChanged("Stocuri");
+            
         }
 
         private void EditeazaStoc(object obj)
         {
+            StocProdus stoc = new StocProdus
+            {
+                IDProdus = int.Parse(IDProdus),
+                Cantitate = Convert.ToInt32(Cantitate),
+                UnitateMasura = UnitateMasura,
+                DataAprovizionare = DataAprovizionare,
+                DataExpirare = DataExpirare,
+                PretAchizitie = Convert.ToDecimal(PretAchizitie),
+                PretVanzare = ConfigFile.adaosComercial * Convert.ToDecimal(PretAchizitie) / 100 + Convert.ToDecimal(PretAchizitie)
+            };
             stocProdusDAL.ActualizeazaStocProdus(StocSelectat);
             stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
             OnPropertyChanged("Stocuri");
@@ -171,6 +196,10 @@ namespace supermarketWPF.ViewModels
 
         private void StergeStoc(object obj)
         {
+            if(StocSelectat == null)
+            {
+                return;
+            }
             stocProdusDAL.StergeStocProdus(StocSelectat.ID);
             Stocuri.Remove(StocSelectat);
             OnPropertyChanged("Stocuri");

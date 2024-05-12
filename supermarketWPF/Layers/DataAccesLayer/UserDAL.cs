@@ -7,10 +7,12 @@ using supermarketWPF.Layers.DataAccesLayer;
 public class UserDAL
 {
     private string connectionString;
+    List<Utilizator> utilizatori;
 
     public UserDAL(string connectionString)
     {
         this.connectionString = connectionString;
+        utilizatori = new List<Utilizator>();
     }
 
     public void AdaugaUtilizator(Utilizator utilizator)
@@ -38,25 +40,26 @@ public class UserDAL
 
     public List<Utilizator> GetUtilizatori()
     {
-        List<Utilizator> utilizatori = new List<Utilizator>();
-
-        using (SqlConnection connection = DALHelper.Connection)
+        if (utilizatori.Count == 0)
         {
-            string query = "SELECT * FROM Utilizatori";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            using (SqlConnection connection = DALHelper.Connection)
             {
-                Utilizator utilizator = new Utilizator();
-                utilizator.ID = Convert.ToInt32(reader["ID"]);
-                utilizator.NumeUtilizator = reader["NumeUtilizator"].ToString();
-                utilizator.Parola = reader["Parola"].ToString();
-                utilizator.TipUtilizator = reader["TipUtilizator"].ToString();
+                string query = "SELECT * FROM Utilizatori";
+                SqlCommand command = new SqlCommand(query, connection);
 
-                utilizatori.Add(utilizator);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Utilizator utilizator = new Utilizator();
+                    utilizator.ID = Convert.ToInt32(reader["ID"]);
+                    utilizator.NumeUtilizator = reader["NumeUtilizator"].ToString();
+                    utilizator.Parola = reader["Parola"].ToString();
+                    utilizator.TipUtilizator = reader["TipUtilizator"].ToString();
+
+                    utilizatori.Add(utilizator);
+                }
             }
         }
 
@@ -91,7 +94,15 @@ public class UserDAL
 
     public void StergeUtilizator(int idUtilizator)
     {
-        try
+        for(int i = 0; i < utilizatori.Count; i++)
+        {
+            if (utilizatori[i].ID == idUtilizator)
+            {
+                utilizatori.RemoveAt(i);
+                break;
+            }
+        }
+        /*try
         {
             using (SqlConnection connection = DALHelper.Connection)
             {
@@ -108,7 +119,7 @@ public class UserDAL
         {
             Console.WriteLine(e);
             MessageBox.Show("LoginError", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        }*/
     }
 
     public Utilizator GetUtilizatorByParola(string parola)

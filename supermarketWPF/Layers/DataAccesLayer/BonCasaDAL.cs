@@ -1,14 +1,17 @@
-﻿using System;
+﻿using supermarketWPF.Layers.DataAccesLayer;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
 public class BonCasaDAL
 {
     private string connectionString;
+    List<BonComplet> bonuriComplet;
 
     public BonCasaDAL(string connectionString)
     {
         this.connectionString = connectionString;
+        bonuriComplet = new List<BonComplet>();
     }
 
     public void AdaugaBonDeCasa(BonCasa BonCasa)
@@ -53,6 +56,36 @@ public class BonCasaDAL
         return bonuriDeCasa;
     }
 
+    public List<BonComplet> GetBonComplet()
+    {
+        bonuriComplet = new List<BonComplet>();
+
+        using (SqlConnection connection = DALHelper.Connection)
+        {
+            string query = "SELECT B.ID, B.DataEliberare, B.Casier, B.SumaIncasata, D.IDBon AS DetaliiID, D.Subtotal, D.IDProdus FROM BonuriDeCasa AS B JOIN DetaliiBonuriDeCasa AS D ON B.ID = D.IDBon";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                BonComplet bonComplet = new BonComplet();
+                bonComplet.id = Convert.ToInt32(reader["ID"]);
+                bonComplet.dataEliberare = Convert.ToDateTime(reader["DataEliberare"]);
+                bonComplet.casier = reader["Casier"].ToString();
+                bonComplet.sumaIncasata = Convert.ToDecimal(reader["SumaIncasata"]);
+                bonComplet.Subtotal = Convert.ToDecimal(reader["Subtotal"]);
+                bonComplet.IDprodus = new List<int>();
+                bonComplet.IDprodus.Add(Convert.ToInt32(reader["IDProdus"]));
+
+                bonuriComplet.Add(bonComplet);
+            }
+        }
+
+        return bonuriComplet;
+    }
+
     public void ActualizeazaBonDeCasa(BonCasa BonCasa)
     {
         using (SqlConnection connection = new SqlConnection(connectionString))
@@ -81,4 +114,15 @@ public class BonCasaDAL
             command.ExecuteNonQuery();
         }
     }
+
+    
+}
+public class BonComplet
+{
+    public int id;
+    public DateTime dataEliberare;
+    public string casier;
+    public decimal sumaIncasata;
+    public List<int> IDprodus;
+    public decimal Subtotal;
 }

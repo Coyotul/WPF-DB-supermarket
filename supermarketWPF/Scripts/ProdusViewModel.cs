@@ -20,6 +20,18 @@ namespace supermarketWPF.ViewModels
         private string iD;
         private string pretVanzare;
 
+        private string producatorCautare;
+
+        public string ProducatorCautare
+        {
+            get { return producatorCautare; }
+            set
+            {
+                producatorCautare = value;
+                OnPropertyChanged("ProducatorCautare");
+            }
+        }
+
         public string Numeprodus
         {
             get { return numeProdus; }

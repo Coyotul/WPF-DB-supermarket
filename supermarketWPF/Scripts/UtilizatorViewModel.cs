@@ -118,8 +118,6 @@ namespace supermarketWPF.ViewModels
             userDAL = new UserDAL(connectionString);
 
             Utilizatori = new ObservableCollection<Utilizator>(userDAL.GetUtilizatori());
-
-            
         }
 
         private void AdaugaUtilizator(object obj)
@@ -191,6 +189,8 @@ namespace supermarketWPF.ViewModels
                         window.Show();
                         Window window1 = new ProduseWindowCasier();
                         window1.Show();
+                        Window window2 = new BonDeCasa();
+                        window2.Show();
                     }
                     else
                     {

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace supermarketWPF
 {
-    public class ConfigFIle
+    public static class ConfigFile
     {
-        public int adaosComercial = 10;
+        public static int adaosComercial = 10;
     }
 }
