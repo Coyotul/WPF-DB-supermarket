@@ -23,6 +23,7 @@ public class ProdusService
             command.Parameters.AddWithValue("@CodDeBare", codDeBare);
             command.Parameters.AddWithValue("@Categorie", categorie);
             command.Parameters.AddWithValue("@Producator", producator);
+            command.Parameters.AddWithValue("@DataIntrarii", DateTime.Now);
 
             connection.Open();
             command.ExecuteNonQuery();
@@ -68,7 +69,7 @@ public class ProdusService
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
-            string query = "SELECT * FROM Produse";
+            string query = "SELECT p.*, sp.PretAchizitie, sp.PretVanzare FROM Produse p JOIN StocuriProduse sp ON p.ID = sp.IDProdus";
             SqlCommand command = new SqlCommand(query, connection);
 
             connection.Open();
@@ -83,7 +84,7 @@ public class ProdusService
                 produs.Categorie = reader["Categorie"].ToString();
                 produs.Producator = reader["Producator"].ToString();
                 produs.DataIntrarii = Convert.ToDateTime(reader["DataIntrarii"]);
-
+                produs.Pret = (float)Convert.ToDecimal(reader["PretVanzare"]);
                 produse.Add(produs);
             }
         }
@@ -91,6 +92,7 @@ public class ProdusService
         return produse;
     }
 }
+
 
 public class Produs
 {
@@ -100,5 +102,19 @@ public class Produs
     public string Categorie { get; set; }
     public string Producator { get; set; }
     public DateTime DataIntrarii { get; set; }
+    public float Pret { get; set; }
+    public Produs(int iD, string numeProdus, string codDeBare, string categorie, string producator, DateTime dataIntrarii, float pret)
+    {
+        ID = iD;
+        NumeProdus = numeProdus;
+        CodDeBare = codDeBare;
+        Categorie = categorie;
+        Producator = producator;
+        DataIntrarii = dataIntrarii;
+        Pret = pret;
+    }
+    public Produs()
+    {
+    }
 }
 

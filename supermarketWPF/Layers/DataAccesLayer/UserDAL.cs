@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Windows;
 using supermarketWPF.Layers.DataAccesLayer;
 public class UserDAL
 {
@@ -31,7 +32,7 @@ public class UserDAL
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            MessageBox.Show("Produsul nu a putut fi adăugat în baza de date!", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -83,7 +84,7 @@ public class UserDAL
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            MessageBox.Show("LoginError", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -106,7 +107,7 @@ public class UserDAL
         (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            MessageBox.Show("LoginError", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -140,7 +141,7 @@ public class UserDAL
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            MessageBox.Show("LoginError", "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         return utilizatorGasit;

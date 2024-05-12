@@ -65,6 +65,7 @@
     <Compile Include="CashierWindow.xaml.cs">
       <DependentUpon>CashierWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConfigFIle.cs" />
     <Compile Include="Converters\CategorieProdusConverter.cs" />
     <Compile Include="Converters\ProducatorConverter.cs" />
     <Compile Include="Converters\ProdusConverter.cs" />
@@ -83,8 +84,15 @@
     <Compile Include="Layers\DataAccesLayer\DetaliiBonCasaDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\OfertaDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\ProducatorDAL.cs" />
+    <Compile Include="Layers\DataAccesLayer\ProdusDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\StocuriProduseDAL.cs" />
     <Compile Include="Layers\DataAccesLayer\UserDAL.cs" />
+    <Compile Include="ProduseWindowCasier.xaml.cs">
+      <DependentUpon>ProduseWindowCasier.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProduseWindow.xaml.cs">
+      <DependentUpon>ProduseWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scripts\BonDeCasaViewModel.cs" />
     <Compile Include="Scripts\CategorieProdusViewModel.cs" />
     <Compile Include="Scripts\DetaliiBonCasaViewModel.cs" />
@@ -115,6 +123,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ProduseWindowCasier.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ProduseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

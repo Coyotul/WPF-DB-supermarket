@@ -185,15 +185,19 @@ namespace supermarketWPF.ViewModels
 
                 if (utilizatorGasit != null)
                 {
-                    if(utilizatorGasit.TipUtilizator == "cashier")
+                    if(utilizatorGasit.TipUtilizator == "casier")
                     {
                         Window window = new CashierWindow();
                         window.Show();
+                        Window window1 = new ProduseWindowCasier();
+                        window1.Show();
                     }
                     else
                     {
                         Window window = new AdminWindow();
                         window.Show();
+                        Window window1 = new ProduseWindow();
+                        window1.Show();
                     }
                    
                 }
