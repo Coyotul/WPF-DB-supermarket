@@ -1,71 +1,186 @@
-﻿using supermarketWPF;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-
-public class StocProdusViewModel : INotifyPropertyChanged
+using supermarketWPF;
+using supermarketWPF.Layers.DataAccesLayer;
+namespace supermarketWPF.ViewModels
 {
-    private StocProdus stocSelectat;
-    private ObservableCollection<StocProdus> stocuri;
-    private StocProdusDAL stocProdusDAL;
-
-    public StocProdus StocSelectat
+    public class StocProdusViewModel : INotifyPropertyChanged
     {
-        get { return stocSelectat; }
-        set
+        private StocProdus stocSelectat;
+        private ObservableCollection<StocProdus> stocuri;
+        private StocProdusDAL stocProdusDAL;
+        private string idProdus;
+        private string cantitate;
+        private string unitateMasura;
+        private DateTime dataAprovizionare;
+        private DateTime dataExpirare;
+        private string pretAchizitie;
+        private string pretVanzare;
+
+        public string IDProdus
         {
-            stocSelectat = value;
-            OnPropertyChanged("StocSelectat");
+            get { return idProdus; }
+            set
+            {
+                idProdus = value;
+                OnPropertyChanged("IDProdus");
+            }
         }
-    }
-
-    public ObservableCollection<StocProdus> Stocuri
-    {
-        get { return stocuri; }
-        set
+        public string Cantitate
         {
-            stocuri = value;
+            get { return cantitate; }
+            set
+            {
+                cantitate = value;
+                OnPropertyChanged("Cantitate");
+            }
+        }
+        public string UnitateMasura
+        {
+            get { return unitateMasura; }
+            set
+            {
+                unitateMasura = value;
+                OnPropertyChanged("UnitateMasura");
+            }
+        }
+        public DateTime DataAprovizionare
+        {
+            get { return dataAprovizionare; }
+            set
+            {
+                dataAprovizionare = value;
+                OnPropertyChanged("DataAprovizionare");
+            }
+        }
+        public DateTime DataExpirare
+        {
+            get { return dataExpirare; }
+            set
+            {
+                dataExpirare = value;
+                OnPropertyChanged("DataExpirare");
+            }
+        }
+        public string PretAchizitie
+        {
+            get { return pretAchizitie; }
+            set
+            {
+                pretAchizitie = value;
+                OnPropertyChanged("PretAchizitie");
+            }
+        }
+        public string PretVanzare
+        {
+            get { return pretVanzare; }
+            set
+            {
+                pretVanzare = value;
+                OnPropertyChanged("PretVanzare");
+            }
+        }
+
+
+        public StocProdusViewModel(string connectionString)
+        {
+            stocProdusDAL = new StocProdusDAL(connectionString);
+
+            Stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
+        }
+        public StocProdusViewModel()
+        {
+        }
+
+        public StocProdus StocSelectat
+        {
+            get { return stocSelectat; }
+            set
+            {
+                stocSelectat = value;
+                OnPropertyChanged("StocSelectat");
+            }
+        }
+
+        public ObservableCollection<StocProdus> Stocuri
+        {
+            get { return stocuri; }
+            set
+            {
+                stocuri = value;
+                OnPropertyChanged("Stocuri");
+            }
+        }
+
+        private ICommand adaugaStocCommand;
+        public ICommand AdaugaStocCommand
+        {
+            get
+            {
+                if (adaugaStocCommand == null)
+                {
+                    adaugaStocCommand = new RelayCommand(AdaugaStoc);
+                }
+                return adaugaStocCommand;
+            }
+        }
+
+        private ICommand editeazaStocCommand;
+        public ICommand EditeazaStocCommand
+        {
+            get
+            {
+                if (editeazaStocCommand == null)
+                {
+                    editeazaStocCommand = new RelayCommand(EditeazaStoc);
+                }
+                return editeazaStocCommand;
+            }
+        }
+
+        private ICommand stergeStocCommand;
+        public ICommand StergeStocCommand
+        {
+            get
+            {
+                if (stergeStocCommand == null)
+                {
+                    stergeStocCommand = new RelayCommand(StergeStoc);
+                }
+                return stergeStocCommand;
+            }
+        }
+
+        private void AdaugaStoc(object obj)
+        {
+            stocProdusDAL.AdaugaStocProdus(StocSelectat);
+            Stocuri.Add(StocSelectat);
+            stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
             OnPropertyChanged("Stocuri");
         }
-    }
 
-    public ICommand AdaugaStocCommand { get; set; }
-    public ICommand EditeazaStocCommand { get; set; }
-    public ICommand StergeStocCommand { get; set; }
+        private void EditeazaStoc(object obj)
+        {
+            stocProdusDAL.ActualizeazaStocProdus(StocSelectat);
+            stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
+            OnPropertyChanged("Stocuri");
 
-    public StocProdusViewModel(string connectionString)
-    {
-        stocProdusDAL = new StocProdusDAL(connectionString);
+        }
 
-        Stocuri = new ObservableCollection<StocProdus>(stocProdusDAL.GetStocuriProduse());
+        private void StergeStoc(object obj)
+        {
+            stocProdusDAL.StergeStocProdus(StocSelectat.ID);
+            Stocuri.Remove(StocSelectat);
+            OnPropertyChanged("Stocuri");
+        }
 
-        AdaugaStocCommand = new RelayCommand(AdaugaStoc);
-        EditeazaStocCommand = new RelayCommand(EditeazaStoc);
-        StergeStocCommand = new RelayCommand(StergeStoc);
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    private void AdaugaStoc(object obj)
-    {
-        stocProdusDAL.AdaugaStocProdus(StocSelectat);
-        Stocuri.Add(StocSelectat);
-    }
-
-    private void EditeazaStoc(object obj)
-    {
-        stocProdusDAL.ActualizeazaStocProdus(StocSelectat);
-    }
-
-    private void StergeStoc(object obj)
-    {
-        stocProdusDAL.StergeStocProdus(StocSelectat.ID);
-        Stocuri.Remove(StocSelectat);
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -1,0 +1,47 @@
+﻿<Window x:Class="supermarketWPF.StocWindowAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:supermarketWPF.ViewModels"
+        mc:Ignorable="d"
+        Title="StocWindowAdmin" Height="800" Width="800">
+    <Window.DataContext>
+        <vm:StocProdusViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel Margin="20">
+            <!-- Cantitate -->
+            <TextBlock Text="IdProdus:" Margin="5"/>
+            <TextBox Name="txId" Width="200" Margin="5" Text="{Binding IdProdus, UpdateSourceTrigger=PropertyChanged}"/>
+            <!-- Cantitate -->
+            <TextBlock Text="Cantitate:" Margin="5"/>
+            <TextBox Name="txtCantitate" Width="200" Margin="5" Text="{Binding Cantitate, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- Unitate de măsură -->
+            <TextBlock Text="Unitate de Măsură:" Margin="5"/>
+            <TextBox Name="txtUnitateMasura" Width="200" Margin="5" Text="{Binding UnitateMasura, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- Data Aprovizionării -->
+            <TextBlock Text="Data Aprovizionării:" Margin="5"/>
+            <DatePicker Name="dpDataAprovizionare" Width="200" Margin="5" SelectedDate="{Binding DataAprovizionare}"/>
+
+            <!-- Data Expirării -->
+            <TextBlock Text="Data Expirării:" Margin="5"/>
+            <DatePicker Name="dpDataExpirare" Width="200" Margin="5" SelectedDate="{Binding DataExpirare}"/>
+
+            <!-- Preț de Achiziție -->
+            <TextBlock Text="Preț de Achiziție:" Margin="5"/>
+            <TextBox Name="txtPretAchizitie" Width="200" Margin="5" Text="{Binding PretAchizitie, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+            <!-- Buton pentru adăugarea stocului -->
+            <Button Content="Adaugă Stoc" Command="{Binding AdaugaStocCommand}" Margin="5"/>
+
+            <!-- DataGrid pentru afișarea stocurilor -->
+            <DataGrid Name="stocuriGrid" AutoGenerateColumns="True" Margin="10"
+                      ItemsSource="{Binding Stocuri}">
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>

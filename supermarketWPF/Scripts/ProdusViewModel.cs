@@ -198,6 +198,8 @@ namespace supermarketWPF.ViewModels
         {
             if (produsSelectat != null)
             {
+                StocProdusDAL stocProdusDAL = new StocProdusDAL(@"ConnectionString");
+                stocProdusDAL.StergeStocProdus(produsSelectat.ID);
                 produsDAL.StergeProdus(produsSelectat.NumeProdus);
                 Produse = new ObservableCollection<Produs>(produsDAL.GetProduse());
                 MessageBox.Show("Produs șters cu succes!");

@@ -198,8 +198,9 @@ namespace supermarketWPF.ViewModels
                         window.Show();
                         Window window1 = new ProduseWindow();
                         window1.Show();
+                        Window window2 = new StocWindowAdmin();
+                        window2.Show();
                     }
-                   
                 }
                 else
                 {
