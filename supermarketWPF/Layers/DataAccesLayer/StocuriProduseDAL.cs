@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
+using supermarketWPF.Layers.DataAccesLayer;
+
 public class StocProdusDAL
 {
     private string connectionString;
@@ -15,7 +17,7 @@ public class StocProdusDAL
     // Metodă pentru adăugarea unui stoc de produs în baza de date
     public void AdaugaStocProdus(StocProdus stocProdus)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        using (SqlConnection connection = DALHelper.Connection)
         {
             string query = "INSERT INTO StocuriProduse (IDProdus, Cantitate, UnitateMasura, DataAprovizionare, DataExpirare, PretAchizitie, PretVanzare) VALUES (@IDProdus, @Cantitate, @UnitateMasura, @DataAprovizionare, @DataExpirare, @PretAchizitie, @PretVanzare)";
             SqlCommand command = new SqlCommand(query, connection);
@@ -37,7 +39,7 @@ public class StocProdusDAL
     {
         List<StocProdus> stocuriProduse = new List<StocProdus>();
 
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        using (SqlConnection connection = DALHelper.Connection)
         {
             string query = "SELECT * FROM StocuriProduse";
             SqlCommand command = new SqlCommand(query, connection);
@@ -67,7 +69,7 @@ public class StocProdusDAL
     // Metodă pentru actualizarea unui stoc de produs în baza de date
     public void ActualizeazaStocProdus(StocProdus stocProdus)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        using (SqlConnection connection = DALHelper.Connection)
         {
             string query = "UPDATE StocuriProduse SET Cantitate = @Cantitate, UnitateMasura = @UnitateMasura, DataAprovizionare = @DataAprovizionare, DataExpirare = @DataExpirare, PretAchizitie = @PretAchizitie, PretVanzare = @PretVanzare WHERE ID = @ID";
             SqlCommand command = new SqlCommand(query, connection);
@@ -87,7 +89,7 @@ public class StocProdusDAL
     // Metodă pentru ștergerea unui stoc de produs din baza de date
     public void StergeStocProdus(int idStocProdus)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        using (SqlConnection connection = DALHelper.Connection)
         {
             string query = "DELETE FROM StocuriProduse WHERE ID = @ID";
             SqlCommand command = new SqlCommand(query, connection);
